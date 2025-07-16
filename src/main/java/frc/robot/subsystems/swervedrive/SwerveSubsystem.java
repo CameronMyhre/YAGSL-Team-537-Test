@@ -6,6 +6,7 @@ package frc.robot.subsystems.swervedrive;
 
 import static edu.wpi.first.units.Units.Meter;
 
+import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.commands.PathfindingCommand;
@@ -90,7 +91,7 @@ public class SwerveSubsystem extends SubsystemBase
     {
       swerveDrive = new SwerveParser(directory).createSwerveDrive(Constants.MAX_SPEED, startingPose);
       // Alternative method if you don't want to supply the conversion factor via JSON files.
-      // swerveDrive = new SwerveParser(directory).createSwerveDrive(maximumSpeed, angleConversionFactor, driveConversionFactor);
+     //tr swerveDrive = new SwerveParser(directory).createSwerveDrive(6, 360, driveConversionFactor);
     } catch (Exception e)
     {
       throw new RuntimeException(e);
@@ -100,7 +101,7 @@ public class SwerveSubsystem extends SubsystemBase
     swerveDrive.setAngularVelocityCompensation(true,
                                                true,
                                                0.1); //Correct for skew that gets worse as angular velocity increases. Start with a coefficient of 0.1.
-    swerveDrive.setModuleEncoderAutoSynchronize(false,
+    swerveDrive.setModuleEncoderAutoSynchronize(true,
                                                 1); // Enable if you want to resynchronize your absolute encoders and motor encoders periodically when they are not moving.
     // swerveDrive.pushOffsetsToEncoders(); // Set the absolute encoder to be used over the internal encoder and push the offsets onto it. Throws warning if not possible
     if (visionDriveTest)
@@ -152,6 +153,10 @@ public class SwerveSubsystem extends SubsystemBase
     SmartDashboard.putNumber("Robot X", robotPose.getX());
     SmartDashboard.putNumber("Robot Y", robotPose.getY());
     SmartDashboard.putNumber("Robot Heading", robotPose.getRotation().getDegrees());
+
+    var  modules = this.getSwerveDrive().getModules();
+    var module = modules[1];
+    module.getAbsolutePosition();
   }
 
   @Override
