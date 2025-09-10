@@ -143,12 +143,18 @@ public class Vision
     for (Cameras camera : Cameras.values())
     {
       Optional<EstimatedRobotPose> poseEst = getEstimatedGlobalPose(camera);
+      System.out.println("A");
       if (poseEst.isPresent())
       {
         var pose = poseEst.get();
+        System.out.print("(" + pose.estimatedPose.getX() + ", " + pose.estimatedPose.getY() + ")");
         swerveDrive.addVisionMeasurement(pose.estimatedPose.toPose2d(),
                                          pose.timestampSeconds,
                                          camera.curStdDevs);
+
+        if (pose != null) {
+          System.out.println("C");
+        }
       }
     }
 
@@ -340,7 +346,7 @@ public class Vision
      */
     CENTER_CAM("back",
                new Rotation3d(0, 0, Units.degreesToRadians(180)),
-               new Translation3d(Units.inchesToMeters(-12.5),
+               new Translation3d(Units.inchesToMeters(-10), 
                                  Units.inchesToMeters(0),
                                  Units.inchesToMeters(0)),
                VecBuilder.fill(4, 4, 8), VecBuilder.fill(0.5, 0.5, 1));
